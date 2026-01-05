@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History Search</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --accent: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --success: #4cc9f0;
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .search-app {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .app-header {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            transform: rotate(30deg);
+        }
+
+        .app-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .app-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 300;
+            position: relative;
+        }
+
+        .search-container {
+            padding: 30px;
+            position: relative;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: white;
+            border-radius: 50px;
+            padding: 5px 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+
+        .search-box:focus-within {
+            border-color: var(--primary);
+            box-shadow: 0 5px 20px rgba(67, 97, 238, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .search-icon {
+            color: var(--gray);
+            font-size: 1.2rem;
+            margin-right: 10px;
+        }
+
+        #search-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 15px 0;
+            font-size: 1.1rem;
+            background: transparent;
+        }
+
+        .search-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .results-container {
+            padding: 0 30px 30px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .results-count {
+            margin-bottom: 20px;
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        .history-item {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            border-left: 4px solid transparent;
+        }
+
+        .history-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-left-color: var(--primary);
+        }
+
+        .favicon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .item-content {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .item-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .item-url {
+            color: var(--gray);
+            font-size: 0.9rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 10px;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .history-item:hover .item-actions {
+            opacity: 1;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            font-size: 1rem;
+            transition: var(--transition);
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        .action-btn:hover {
+            color: var(--primary);
+            background: rgba(67, 97, 238, 0.1);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray);
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: #e0e0e0;
+        }
+
+        .empty-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(67, 97, 238, 0.2);
+            border-left: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .highlight {
+            background-color: rgba(255, 215, 0, 0.3);
+            padding: 0 2px;
+            border-radius: 3px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .app-title {
+                font-size: 2rem;
+            }
+            
+            .search-container {
+                padding: 20px;
+            }
+            
+            .results-container {
+                padding: 0 20px 20px;
+            }
+            
+            .history-item {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="search-app">
+            <div class="app-header">
+                <h1 class="app-title">Full Text Search , Postgresql FTS Engine💥📡🚀🌩🌀💥☢</h1>
+                <p class="app-subtitle">Find anything from your browsing history instantly</p>
+            </div>
+            
+            <div class="search-container">
+                <div class="search-box">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="search-input" placeholder="Search your browsing history...">
+                </div>
+                <div class="search-stats">
+                    <span id="search-time">Ready to search</span>
+                    <span id="results-count">0 results</span>
+                </div>
+            </div>
+            
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Searching your history...</p>
+            </div>
+            
+            <div class="results-container" id="results-container">
+                <div class="empty-state" id="empty-state">
+                    <i class="fas fa-search empty-icon"></i>
+                    <h2 class="empty-title">No search yet</h2>
+                    <p>Enter a search term to find pages from your browsing history</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            Powered by FastAPI & PostgreSQL FTS • Built with ❤️ for extreme UX
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const searchInput = document.getElementById('search-input');
+        const resultsContainer = document.getElementById('results-container');
+        const emptyState = document.getElementById('empty-state');
+        const loading = document.getElementById('loading');
+        const searchTime = document.getElementById('search-time');
+        const resultsCount = document.getElementById('results-count');
+        
+        // Configuration
+        const API_BASE_URL = 'http://localhost:8000';
+        const DEBOUNCE_DELAY = 300; // ms
+        let searchTimeout = null;
+        let currentSearchTerm = '';
+        
+        // Event Listeners
+        searchInput.addEventListener('input', handleSearchInput);
+        
+        // Functions
+        function handleSearchInput(e) {
+            const searchTerm = e.target.value.trim();
+            
+            // Clear previous timeout
+            if (searchTimeout) {
+                clearTimeout(searchTimeout);
+            }
+            
+            // Show empty state if search is cleared
+            if (searchTerm === '') {
+                showEmptyState();
+                return;
+            }
+            
+            // Set new timeout for debounced search
+            searchTimeout = setTimeout(() => {
+                performSearch(searchTerm);
+            }, DEBOUNCE_DELAY);
+        }
+        
+        async function performSearch(searchTerm) {
+            currentSearchTerm = searchTerm;
+            
+            // Show loading state
+            showLoading();
+            
+            try {
+                const startTime = performance.now();
+                
+                // Make API request
+                const response = await fetch(`${API_BASE_URL}/search?q=${encodeURIComponent(searchTerm)}`);
+                
+                if (!response.ok) {
+                    throw new Error(`API error: ${response.status}`);
+                }
+                
+                const results = await response.json();
+                const endTime = performance.now();
+                const searchDuration = (endTime - startTime).toFixed(0);
+                
+                // Update search stats
+                searchTime.textContent = `Found in ${searchDuration}ms`;
+                resultsCount.textContent = `${results.length} result${results.length !== 1 ? 's' : ''}`;
+                
+                // Display results
+                displayResults(results, searchTerm);
+                
+            } catch (error) {
+                console.error('Search error:', error);
+                showError('Failed to fetch search results. Please try again.');
+            }
+        }
+        
+        function displayResults(results, searchTerm) {
+            // Hide loading and empty state
+            hideLoading();
+            emptyState.style.display = 'none';
+            
+            // Clear previous results
+            resultsContainer.innerHTML = '';
+            
+            if (results.length === 0) {
+                showNoResults(searchTerm);
+                return;
+            }
+            
+            // Create result elements
+            results.forEach(item => {
+                const resultElement = createResultElement(item, searchTerm);
+                resultsContainer.appendChild(resultElement);
+            });
+        }
+        
+        function createResultElement(item, searchTerm) {
+            const historyItem = document.createElement('div');
+            historyItem.className = 'history-item';
+            
+            // Extract domain for favicon
+            const domain = extractDomain(item.navigated_to_url);
+            
+            // Highlight search terms in title
+            const highlightedTitle = highlightText(item.page_title, searchTerm);
+            
+            historyItem.innerHTML = `
+                <div class="favicon">
+                    <i class="fas fa-globe"></i>
+                </div>
+                <div class="item-content">
+                    <div class="item-title">${highlightedTitle}</div>
+                    <div class="item-url">${item.navigated_to_url}</div>
+                </div>
+                <div class="item-actions">
+                    <button class="action-btn" title="Open link">
+                        <i class="fas fa-external-link-alt"></i>
+                    </button>
+                    <button class="action-btn" title="Copy link">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                </div>
+            `;
+            
+            // Add click event to open the URL
+            historyItem.addEventListener('click', (e) => {
+                if (!e.target.closest('.item-actions')) {
+                    window.open(item.navigated_to_url, '_blank');
+                }
+            });
+            
+            // Add event listeners to action buttons
+            const actionButtons = historyItem.querySelectorAll('.action-btn');
+            actionButtons[0].addEventListener('click', (e) => {
+                e.stopPropagation();
+                window.open(item.navigated_to_url, '_blank');
+            });
+            
+            actionButtons[1].addEventListener('click', (e) => {
+                e.stopPropagation();
+                navigator.clipboard.writeText(item.navigated_to_url)
+                    .then(() => {
+                        // Show copied feedback (could be enhanced with a toast)
+                        const icon = e.target.tagName === 'I' ? e.target : e.target.querySelector('i');
+                        icon.className = 'fas fa-check';
+                        setTimeout(() => {
+                            icon.className = 'fas fa-copy';
+                        }, 2000);
+                    });
+            });
+            
+            return historyItem;
+        }
+        
+        function highlightText(text, searchTerm) {
+            if (!searchTerm) return text;
+            
+            const terms = searchTerm.split(' ');
+            let highlightedText = text;
+            
+            terms.forEach(term => {
+                if (term.length > 0) {
+                    const regex = new RegExp(`(${term})`, 'gi');
+                    highlightedText = highlightedText.replace(regex, '<span class="highlight">$1</span>');
+                }
+            });
+            
+            return highlightedText;
+        }
+        
+        function extractDomain(url) {
+            try {
+                const domain = new URL(url).hostname;
+                return domain.replace('www.', '');
+            } catch (e) {
+                return 'unknown';
+            }
+        }
+        
+        function showNoResults(searchTerm) {
+            emptyState.innerHTML = `
+                <i class="fas fa-folder-open empty-icon"></i>
+                <h2 class="empty-title">No results found</h2>
+                <p>No history items match "${searchTerm}"</p>
+            `;
+            emptyState.style.display = 'block';
+        }
+        
+        function showEmptyState() {
+            emptyState.innerHTML = `
+                <i class="fas fa-search empty-icon"></i>
+                <h2 class="empty-title">No search yet</h2>
+                <p>Enter a search term to find pages from your browsing history</p>
+            `;
+            emptyState.style.display = 'block';
+            resultsContainer.innerHTML = '';
+            searchTime.textContent = 'Ready to search';
+            resultsCount.textContent = '0 results';
+        }
+        
+        function showLoading() {
+            loading.style.display = 'block';
+            emptyState.style.display = 'none';
+            resultsContainer.innerHTML = '';
+            searchTime.textContent = 'Searching...';
+        }
+        
+        function hideLoading() {
+            loading.style.display = 'none';
+        }
+        
+        function showError(message) {
+            emptyState.innerHTML = `
+                <i class="fas fa-exclamation-triangle empty-icon"></i>
+                <h2 class="empty-title">Search Error</h2>
+                <p>${message}</p>
+            `;
+            emptyState.style.display = 'block';
+            hideLoading();
+        }
+        
+        // Initialize
+        showEmptyState();
+    </script>
+</body>
+</html>

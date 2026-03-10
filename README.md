@@ -1,15 +1,17 @@
-Here is a well-structured Markdown README for your FastSearch project. It includes Mermaid diagrams to visually explain the architecture, database schema, and request flow, making it perfect for a resume-grade portfolio piece.
-```markdown
 # 🔎 FastSearch – Full Text & Vector Search Application
 ### FastAPI + PostgreSQL
 
 <div align="center">
 
-[![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
-[![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-FF6C37?style=for-the-badge&logo=python&logoColor=white)](https://www.sqlalchemy.org/)
-[![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+<!-- Badges - Properly formatted using Markdown with HTML wrapper -->
+<p align="center">
+  <img src="https://img.shields.io/badge/FastAPI-0.104+-009688?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI"/>
+  <img src="https://img.shields.io/badge/PostgreSQL-15+-316192?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL"/>
+  <img src="https://img.shields.io/badge/pgvector-0.5+-FF6F00?style=for-the-badge&logo=postgresql&logoColor=white" alt="pgvector"/>
+  <img src="https://img.shields.io/badge/SQLAlchemy-2.0+-FF0000?style=for-the-badge&logo=python&logoColor=white" alt="SQLAlchemy"/>
+  <img src="https://img.shields.io/badge/Python-3.9+-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python"/>
+  <img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge" alt="License"/>
+</p>
 
 **High-performance backend search engine combining traditional full-text with modern vector search capabilities**
 
@@ -504,9 +506,11 @@ volumes:
 **Shaan**  
 *MCA | Backend & API Developer*
 
-[![GitHub](https://img.shields.io/badge/GitHub-shaanMS-181717?style=for-the-badge&logo=github)](https://github.com/shaanMS)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Shaan-0077B5?style=for-the-badge&logo=linkedin)](https://linkedin.com/in/shaanms)
-[![Twitter](https://img.shields.io/badge/Twitter-@shaanms-1DA1F2?style=for-the-badge&logo=twitter)](https://twitter.com/shaanms)
+<p align="center">
+  <img src="https://img.shields.io/badge/GitHub-shaanMS-181717?style=for-the-badge&logo=github" alt="GitHub"/>
+  <img src="https://img.shields.io/badge/LinkedIn-Shaan-0077B5?style=for-the-badge&logo=linkedin" alt="LinkedIn"/>
+  <img src="https://img.shields.io/badge/Twitter-@shaanms-1DA1F2?style=for-the-badge&logo=twitter" alt="Twitter"/>
+</p>
 
 </div>
 
@@ -522,19 +526,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ### ⭐ Star the repository if you find it useful!
 
-[Report Bug](https://github.com/shaanMS/FTS_Search_Using_FastApi_Postgresql/issues) · 
-[Request Feature](https://github.com/shaanMS/FTS_Search_Using_FastApi_Postgresql/issues)
+<p align="center">
+  <a href="https://github.com/shaanMS/FTS_Search_Using_FastApi_Postgresql/issues">Report Bug</a> · 
+  <a href="https://github.com/shaanMS/FTS_Search_Using_FastApi_Postgresql/issues">Request Feature</a>
+</p>
 
 **Built with ❤️ using FastAPI & PostgreSQL**
 
 </div>
-```
-
-This README now includes:
-- **Mermaid diagrams** for architecture visualization
-- **Interactive tables** with feature comparisons
-- **API documentation** with examples
-- **Database schema** visualization
-- **Performance metrics** section
-- **Docker deployment** configuration
-- **Badges** and professional formatting

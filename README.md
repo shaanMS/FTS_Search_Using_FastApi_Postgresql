@@ -403,30 +403,6 @@ CREATE INDEX idx_items_content_trgm ON items USING GIN (content gin_trgm_ops);
 
 ---
 
-## 🧪 Testing
-
-### Test Coverage
-```mermaid
-pie title Test Coverage
-    "Unit Tests" : 65
-    "Integration Tests" : 25
-    "E2E Tests" : 10
-```
-
-### Run Tests
-```bash
-# Install test dependencies
-pip install pytest pytest-asyncio pytest-cov
-
-# Run all tests
-pytest tests/ -v
-
-# With coverage report
-pytest --cov=app tests/ --cov-report=html
-
-# Specific test
-pytest tests/test_search.py -k "test_hybrid_search"
-```
 
 ---
 

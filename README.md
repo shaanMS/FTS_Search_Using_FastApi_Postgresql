@@ -265,6 +265,18 @@ sequenceDiagram
    - Adminer: http://localhost:8080 (if using Docker compose)
 
 ---
+## 📸 Screenshots
+
+### 1️⃣ FastSearch Live Application
+
+![FTS Search Live](screenshots/FTS_Search_Live.png)
+
+
+---
+
+### 2️⃣ PostgreSQL Adminer View
+
+![PostgreSQL Adminer](screenshots/Postgresql_Adminer_View.png)
 
 ## 📚 API Reference
 

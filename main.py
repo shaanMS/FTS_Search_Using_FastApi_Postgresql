@@ -40,4 +40,5 @@ def search(q: str = Query(..., min_length=1), db: Session = Depends(get_db)):
 # Health check
 @app.get("/health")
 def health_check():
+    print()
     return {"status": "healthy", "message": "FTS Search API is running"}

@@ -4,7 +4,7 @@ from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 from typing import List
 import os
-
+   
 from database import SessionLocal
 from crud import fts_search
 from schemas import HistoryItem
